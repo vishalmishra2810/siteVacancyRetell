@@ -1,25 +1,23 @@
 {
-    "name": "retell-backend",
-    "version": "1.0.0",
-    "type": "module",
-    "main": "app.js",
-    "scripts": {
-        "start": "node app.js",
-        "build": "tsc",
-        "dev": "concurrently \"tsc -w\" \"nodemon dist/app.js\"",
-        "retell": "ts-node retell.ts"
-    },
-    "dependencies": {
-        "dotenv": "^16.4.7",
-        "express": "^4.21.2",
-        "retell-sdk": "^4.22.0",
-        "websocket": "^1.0.35",
-        "ws": "^8.18.1"
-    },
-    "devDependencies": {
-        "@types/express": "^5.0.1",
-        "@types/ws": "^8.18.1",
-        "concurrently": "^9.1.2",
-        "nodemon": "^3.1.9"
-    }
+  "name": "retellai",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vishalmishra2810/siteVacancyRetell.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vishalmishra2810/siteVacancyRetell/issues"
+  },
+  "homepage": "https://github.com/vishalmishra2810/siteVacancyRetell#readme",
+  "description": "",
+  "dependencies": {
+    "retell-sdk": "^4.22.0"
+  }
 }
