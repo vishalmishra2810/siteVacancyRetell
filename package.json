@@ -1,0 +1,25 @@
+{
+    "name": "retell-backend",
+    "version": "1.0.0",
+    "type": "module",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js",
+        "build": "tsc",
+        "dev": "concurrently \"tsc -w\" \"nodemon dist/app.js\"",
+        "retell": "ts-node retell.ts"
+    },
+    "dependencies": {
+        "dotenv": "^16.4.7",
+        "express": "^4.21.2",
+        "retell-sdk": "^4.22.0",
+        "websocket": "^1.0.35",
+        "ws": "^8.18.1"
+    },
+    "devDependencies": {
+        "@types/express": "^5.0.1",
+        "@types/ws": "^8.18.1",
+        "concurrently": "^9.1.2",
+        "nodemon": "^3.1.9"
+    }
+}
