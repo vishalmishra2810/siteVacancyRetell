@@ -1,58 +1,56 @@
 import express, { json } from 'express';
-import { createServer } from 'http';
+import cors from 'cors';
+import Retell from 'retell-sdk';
 
 const app = express();
+const port = 8080;
 
+// Initialize Retell client
+const retellClient = new Retell({
+  apiKey: 'key_b882f9b4a38ba617024f13445770', // Consider moving to environment variables
+});
+
+// Middleware
+app.use(cors());
 app.use(json());
 
-const server = createServer(app);
+app.post('/create-web-call', async (req, res) => {
+    const { agent_id } = req.body;
 
-let latestCallId = null;
-
-// Retell AI Webhook Endpoint
-app.post('/retell-webhook', (req, res) => {
     try {
-        console.log("Call Id is here:", req.body);
-
-        latestCallId = req.body.call?.call_id
-
-        const userMessage = req.body.transcript || "";
-        const intent = req.body.intent || "";
-
-        console.log(`User message: "${userMessage}", Intent: "${intent}"`);
-
-        if (userMessage.toLowerCase().includes("job") ||
-            userMessage.toLowerCase().includes("hire") ||
-            intent === "job_search") {
-            const response = {
-                response: "I found 20 open positions for you! Here are the details...",
-                jobs: [
-                    { title: "Software Engineer", company: "Snapmint", location: "Remote" },
-                    { title: "Marketing Manager", company: "GrowthGen", location: "New York" },
-                ],
-                actions: ["apply", "learn_more"]
-            };
-            return res.json(response);
-        }
-
-        return res.json({
-            response: "I'm JobBot, your hiring assistant! Ask me about open roles or application status.",
-            actions: []
+        const webCallResponse = await retellClient.call.createWebCall({
+            agent_id
         });
 
+        res.status(200).json(webCallResponse);
     } catch (error) {
-        console.error("Error:", error);
-        return res.status(500).json({
-            response: "Sorry, I encountered an error processing your request.",
-            actions: []
+        console.error('Error creating web call:', error);
+        res.status(500).json({
+            error: 'Failed to create web call',
+            details: error.message
         });
     }
 });
 
-module.exports = {
-    getLatestCallId: () => latestCallId,
-};
+app.get('/v2/get-call/:call_id', async (req, res) => {
+    const { call_id } = req.params;
 
-server.listen(4000, () => {
-    console.log("Server running on http://localhost:4000");
+    if (!call_id) {
+        return res.status(400).json({ error: 'call_id is required' });
+    }
+
+    try {
+        const callDetails = await retellClient.call.retrieve(call_id);
+        res.status(200).json(callDetails);
+    } catch (error) {
+        console.error('Error fetching call details:', error);
+        res.status(500).json({
+            error: 'Failed to fetch call details',
+            details: error.message
+        });
+    }
+});
+
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
 });
